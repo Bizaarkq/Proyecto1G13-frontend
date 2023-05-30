@@ -2,19 +2,20 @@ import React, {useContext, useEffect} from 'react';
 import {authService} from './src/services/authService.js';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import { IconButton, MD3Colors } from 'react-native-paper';
+import {IconButton, MD3Colors} from 'react-native-paper';
 import Login from './src/components/auth/login.jsx';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {PaperProvider} from 'react-native-paper';
 import {HomeEstudiante, HomeDocente} from './src/components/menu/home.jsx';
-import { ActivityIndicator, MD2Colors } from 'react-native-paper';
+import {ActivityIndicator, MD2Colors} from 'react-native-paper';
+import {RevisionEstudiante} from './src/views/Estudiante-Revision.jsx';
+import {SolicitudRevision} from './src/components/revision/solicitudRev';
 
 export const AuthContext = React.createContext({});
 
 const Stack = createNativeStackNavigator();
 
 function App(): JSX.Element {
-
   const [state, dispatch] = React.useReducer(
     (prevState, action) => {
       switch (action.type) {
@@ -54,7 +55,7 @@ function App(): JSX.Element {
       isLoading: false,
       isSignout: false,
       userToken: null,
-      user: null
+      user: null,
     },
   );
 
@@ -62,14 +63,14 @@ function App(): JSX.Element {
     const bootstrapAsync = async () => {
       let user = await AsyncStorage.getItem('user');
       user = JSON.parse(user);
-      if(user !== null) {
+      if (user !== null) {
         let estado = {
           token: user.token,
           user: user.user,
-        }
+        };
         dispatch({type: 'RESTORE_TOKEN', estado});
-      }      
-    }
+      }
+    };
 
     bootstrapAsync();
   }, []);
@@ -93,13 +94,13 @@ function App(): JSX.Element {
       signOut: () => dispatch({type: 'SIGN_OUT'}),
       restoreToken: async () => {
         let user = await AsyncStorage.getItem('user');
-        if(!user) {
+        if (!user) {
           let estado = {
             token: user.token,
             user: user.user,
-          }
+          };
           dispatch({type: 'RESTORE_TOKEN', estado});
-        }       
+        }
       },
       getState: () => dispatch({type: 'GET_STATE'}),
     }),
@@ -117,28 +118,47 @@ function App(): JSX.Element {
               ) : state.userToken === null ? (
                 <Stack.Screen name="Login" component={Login} />
               ) : (
+                <>
                   <Stack.Screen
-                  name="Inicio"
-                  component={state.user?.role == 'estudiante' ? HomeEstudiante : HomeDocente}
-                  initialParams={{
-                    user: state.user
-                  }}
-                  options={{
-                    headerRight: () => (
-                      <IconButton
-                        icon="logout"
-                        iconColor={MD3Colors.red800}
-                        size={30}
-                        mode='contained'
-                        onPress={async () => {
-                          await AsyncStorage.removeItem('user');
-                          dispatch({type: 'SIGN_OUT'})
-                        }}
-                        
-                      />
-                    )
-                  }}
-                />
+                    name="Inicio"
+                    component={
+                      state.user?.role == 'estudiante'
+                        ? HomeEstudiante
+                        : HomeDocente
+                    }
+                    initialParams={{
+                      user: state.user,
+                    }}
+                    options={{
+                      headerRight: () => (
+                        <IconButton
+                          icon="logout"
+                          iconColor={MD3Colors.red800}
+                          size={30}
+                          mode="contained"
+                          onPress={async () => {
+                            await AsyncStorage.removeItem('user');
+                            dispatch({type: 'SIGN_OUT'});
+                          }}
+                        />
+                      ),
+                    }}
+                  />
+                  <Stack.Screen
+                    name="RevisionEstudiante"
+                    component={RevisionEstudiante}
+                    initialParams={{
+                      user: state.userToken,
+                    }}
+                  />
+                  <Stack.Screen
+                    name="SolicitudRevision"
+                    component={SolicitudRevision}
+                    initialParams={{
+                      user: state.userToken,
+                    }}
+                  />
+                </>
               )}
             </Stack.Navigator>
           </NavigationContainer>
@@ -150,7 +170,7 @@ function App(): JSX.Element {
 
 function SplashScreen() {
   return (
-      <ActivityIndicator size="large" animating={true} color={MD2Colors.red800} />
+    <ActivityIndicator size="large" animating={true} color={MD2Colors.red800} />
   );
 }
 
