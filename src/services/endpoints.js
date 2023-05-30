@@ -14,7 +14,8 @@ export const endpoints = {
         },
         estudiante: {
             get: `${API_URL}/revision/estudiante`,
-            solicitar: `${API_URL}/revision/solicitar`
+            solicitar: `${API_URL}/revision/solicitar`,
+            evaluaciones: `${API_URL}/revision/evaluaciones`
         }
     },
     evaluacion: {
