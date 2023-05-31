@@ -28,9 +28,12 @@ export const endpoints = {
             crear: `${API_URL}/evaluacion/crear`,
             marcarAsis: `${API_URL}/evaluacion/marcar-asistencia`,
             regNota: `${API_URL}/evaluacion/registrar-nota`,
+            getSolicitudDifRep: `${API_URL}/evaluacion/solicitudes-diferido-repetido`,
+            aprobarDifRep: `${API_URL}/evaluacion/aprobar-diferido-repetido`,
         },
         estudiante: {
             getEvaluaciones: `${API_URL}/evaluacion/estudiante`,
+            solicitarDifRep: `${API_URL}/evaluacion/solicitar-diferido-repetido`,
         }
     }
     

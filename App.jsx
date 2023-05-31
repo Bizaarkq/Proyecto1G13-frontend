@@ -15,6 +15,7 @@ import {SolPendientesDoc} from './src/components/revision/docSolRevision';
 import {DetalleSolicitud} from './src/components/revision/detalleSol';
 import {RevisionesDocente} from './src/views/DocenteRevision';
 import {RevisionDetalle} from './src/components/revision/revisionDetalle';
+import {AprobDiffRep} from './src/components/evaluacion/aprobarDifRep';
 
 export const AuthContext = React.createContext({});
 
@@ -85,7 +86,7 @@ function App(): JSX.Element {
       signIn: async data => {
         dispatch({type: 'LOADING'});
         let session = await authService.login(data.email, data.password);
-        if (session.error) {
+        if (!session.success) {
           dispatch({type: 'SIGN_OUT'});
         }
 
@@ -119,7 +120,7 @@ function App(): JSX.Element {
           <NavigationContainer>
             <Stack.Navigator>
               {state?.isLoading ? (
-                <Stack.Screen name="splash" component={SplashScreen} />
+                <Stack.Screen name="splash" options={{ title: 'Iniciando sesión' }} component={SplashScreen} />
               ) : state.userToken === null ? (
                 <Stack.Screen name="Login" component={Login} />
               ) : (
@@ -204,6 +205,14 @@ function App(): JSX.Element {
                       user: state.userToken,
                     }}
                     options={{ title: 'Detalle revision' }}
+                  />
+                  <Stack.Screen
+                    name="AprobarDiffRep"
+                    component={AprobDiffRep}
+                    initialParams={{
+                      user: state.userToken,
+                    }}
+                    options={{ title: 'Solicitudes diferidos/repetidos' }}
                   />
                 </>
               )}
