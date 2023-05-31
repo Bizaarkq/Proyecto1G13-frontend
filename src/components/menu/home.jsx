@@ -51,18 +51,24 @@ const opcionesDocente = [
   },
   {
     id: 2,
+    titulo: 'Solicitudes de revision',
+    route: 'SolicitudesRevisionDocente',
+    descripcion: 'Aprobar o rechazar solicitudes de revisión',
+  },
+  {
+    id: 3,
     titulo: 'Evaluaciones',
     route: 'EvaluacionesDocente',
     descripcion: 'Revisar las evaluaciones',
   },
   {
-    id: 3,
+    id: 4,
     titulo: 'Crear evaluacion',
     route: 'CrearEvaluacion',
     descripcion: 'Crear una evaluacion',
   },
   {
-    id: 4,
+    id: 5,
     titulo: 'Solicitar impresión',
     route: 'SolicitudImpresion',
     descripcion: 'Solicitar impresión de evaluaciones'
@@ -82,7 +88,7 @@ export function HomeDocente({navigation, route}) {
               <Text>{opcion.descripcion}</Text>
             </Card.Content>
             <Card.Actions>
-              <Button onPress={() => navigation.navigate(opcion.router)}>
+              <Button onPress={() => navigation.navigate(opcion.route)}>
                 Ir
               </Button>
             </Card.Actions>

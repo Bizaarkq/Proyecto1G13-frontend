@@ -10,7 +10,8 @@ export const endpoints = {
         docente: {
             get: `${API_URL}/revision/docente`,
             pendientes: `${API_URL}/revision/pendientes`,
-            aprobar: `${API_URL}/revision/aprobar`
+            aprobar: `${API_URL}/revision/aprobar`,
+            solicitudes: `${API_URL}/revision/pendientes`,
         },
         estudiante: {
             get: `${API_URL}/revision/estudiante`,

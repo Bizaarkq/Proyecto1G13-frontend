@@ -11,6 +11,8 @@ import {ActivityIndicator, MD2Colors} from 'react-native-paper';
 import {RevisionEstudiante} from './src/views/Estudiante-Revision.jsx';
 import {SolicitudRevision} from './src/components/revision/solicitudRev';
 import {EvaluacionEst} from './src/components/evaluacion/evaEstudiante';
+import {SolPendientesDoc} from './src/components/revision/docSolRevision';
+import {DetalleSolicitud} from './src/components/revision/detalleSol';
 
 export const AuthContext = React.createContext({});
 
@@ -168,6 +170,22 @@ function App(): JSX.Element {
                       user: state.userToken,
                     }}
                     options={{ title: 'Evaluaciones' }}
+                  />
+                  <Stack.Screen
+                    name="SolicitudesRevisionDocente"
+                    component={SolPendientesDoc}
+                    initialParams={{
+                      user: state.userToken,
+                    }}
+                    options={{ title: 'Solicitudes Pendientes' }}
+                  />
+                  <Stack.Screen
+                    name="DetalleSolicitud"
+                    component={DetalleSolicitud}
+                    initialParams={{
+                      user: state.userToken,
+                    }}
+                    options={{ title: 'Detalle solicitud' }}
                   />
                 </>
               )}
