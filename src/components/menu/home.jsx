@@ -1,5 +1,6 @@
 import {View} from 'react-native';
 import {Button, Card, Text} from 'react-native-paper';
+import { useTheme } from 'react-native-paper';
 
 const opciones = [
   {
@@ -18,12 +19,13 @@ const opciones = [
 
 export function HomeEstudiante({navigation, route}) {
   const {user} = route.params;
+  const theme = useTheme();
   return (
     <View>
       <Text>Carnet: {user.carnet}</Text>
       {opciones.map(opcion => {
         return (
-          <Card key={opcion.id}>
+          <Card key={opcion.id} style={{backgroundColor: theme.colors.surface}}>
             <Card.Title title={opcion.titulo} />
             <Card.Content>
               <Text>{opcion.descripcion}</Text>
@@ -55,22 +57,26 @@ const opcionesDocente = [
   },
   {
     id: 3,
-    titulo: 'Crear Evaluacion',
+    titulo: 'Crear evaluacion',
     route: 'CrearEvaluacion',
     descripcion: 'Crear una evaluacion',
   },
+  {
+    id: 4,
+    titulo: 'Solicitar impresión',
+    route: 'SolicitudImpresion',
+    descripcion: 'Solicitar impresión de evaluaciones'
+  }
 ];
 
 export function HomeDocente({navigation, route}) {
   const {user} = route.params;
-
-  console.log(user);
-
+  const theme = useTheme();
   return (
     <View>
       {opcionesDocente.map(opcion => {
         return (
-          <Card key={opcion.id}>
+          <Card key={opcion.id} style={{backgroundColor: theme.colors.surface}}>
             <Card.Title title={opcion.titulo} />
             <Card.Content>
               <Text>{opcion.descripcion}</Text>

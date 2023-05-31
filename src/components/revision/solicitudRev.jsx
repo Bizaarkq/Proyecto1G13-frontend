@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text} from 'react-native';
 import {Button, TextInput} from 'react-native-paper';
-import {Select, NativeBaseProvider, Box} from 'native-base';
 import {SelectList} from 'react-native-dropdown-select-list';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
@@ -61,7 +60,7 @@ export function SolicitudRevision({navigation, route}) {
         setSubmitting(false);
 
         setTimeout(() => {
-            navigation.navigate('RevisionEstudiante');
+          navigation.goBack();
         }, 2000);
       }}>
       {formik => (
@@ -97,14 +96,10 @@ export function SolicitudRevision({navigation, route}) {
             disabled={formik.isSubmitting}>
             Enviar Solicitud
           </Button>
-          
-          {formik.isSubmitting && (
-            <Text>Enviando solicitud...</Text>
-          )}
 
-          {success && ( 
-            <Text>{message}</Text>
-          )}
+          {formik.isSubmitting && <Text>Enviando solicitud...</Text>}
+
+          {success && <Text>{message}</Text>}
         </View>
       )}
     </Formik>
