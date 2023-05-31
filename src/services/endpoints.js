@@ -7,11 +7,14 @@ export const endpoints = {
         logout: `${API_URL}/auth/logout`
     },
     revision: {
+        motivos: `${API_URL}/revision/motivos`,
+        respsoc: `${API_URL}/revision/resociales`,
         docente: {
             get: `${API_URL}/revision/docente`,
             pendientes: `${API_URL}/revision/pendientes`,
             aprobar: `${API_URL}/revision/aprobar`,
             solicitudes: `${API_URL}/revision/pendientes`,
+            agregar: `${API_URL}/revision/crear`,
         },
         estudiante: {
             get: `${API_URL}/revision/estudiante`,

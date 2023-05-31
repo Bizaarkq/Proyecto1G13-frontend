@@ -7,7 +7,7 @@ import {
   Button,
   Snackbar,
 } from 'react-native-paper';
-import {View, StyleSheet} from 'react-native';
+import {View, ScrollView, StyleSheet, SafeAreaView} from 'react-native';
 import {revisionService} from '../services/revisionService';
 import {useIsFocused} from '@react-navigation/native';
 
@@ -39,7 +39,8 @@ export function RevisionEstudiante({navigation, route}) {
   const onDismissSnackBar = () => setVisible(false);
 
   return (
-    <View style={{flexDirection: 'column', height: '100%'}}>
+    <View style={{flex: 1}}>
+    <ScrollView>
       <Button
         mode="contained"
         onPress={() => navigation.navigate('SolicitudRevision')}>
@@ -75,14 +76,13 @@ export function RevisionEstudiante({navigation, route}) {
                       </Text>
                     </>
                   )}
-                </Card.Content>
-                <Card.Actions>
-                  {value.estado !== 'PENDIENTE' && (
-                    <Button onPress={() => console.log(value)}>
-                      Ver Detalles
-                    </Button>
+                  {value.existe_revision && (
+                    <>
+                      <Text>Fecha de revisión: {value.fecha_revision}</Text>
+                      <Text>Nota: {value.nueva_nota}</Text>
+                    </>
                   )}
-                </Card.Actions>
+                </Card.Content>
               </Card>
             );
           })}
@@ -97,6 +97,7 @@ export function RevisionEstudiante({navigation, route}) {
         }}>
         {seachMessage}
       </Snackbar>
+    </ScrollView>
     </View>
   );
 }

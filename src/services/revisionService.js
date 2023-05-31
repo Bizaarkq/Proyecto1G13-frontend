@@ -49,7 +49,8 @@ export const revisionService = {
         }catch(error){
             return {
                 success: false,
-                message: "Error al obtener las revisiones"
+                message: "Error al obtener las revisiones",
+                data: []
             }
         }
     },
@@ -81,6 +82,50 @@ export const revisionService = {
             return {
                 success: false,
                 message: "Error al aprobar la revisión"
+            }
+        }
+    },
+    getMotivosCambios : async (token) => {
+        try{
+            const headers = {
+                accept: "application/json",
+                Authorization: "Bearer " +token
+            }
+            
+            console.log("headers", headers);
+            const response = await axios.get(endpoints.revision.motivos, { headers });
+            return response.data.success ? response.data.data : [];
+        }catch(error){
+            return []
+        }
+    },
+    getResponsableSoc : async (token) => {
+        try{
+            const headers = {
+                accept: "application/json",
+                Authorization: "Bearer " +token
+            }
+            console.log("headers", headers);
+            const response = await axios.get(endpoints.revision.respsoc, { headers });
+            return response.data.success ? response.data.data : [];
+        }catch(error){
+            console.log("error resp", error);
+            return []
+        }
+    },
+    agregarRevision: async (token, body) => {
+        try{
+            const headers = {
+                accept: "application/json",
+                Authorization: "Bearer " +token
+            }
+
+            const response = await axios.post(endpoints.revision.docente.agregar, body, { headers });
+            return response.data;
+        }catch(error){
+            return {
+                success: false,
+                message: "Error al agregar la revisión"
             }
         }
     }
