@@ -9,12 +9,15 @@ export const authService = {
                 email,
                 password
             });
-            console.log("response", response.data);
+
             return response.data;
         }catch (error) {
             console.log("error", error);
             console.log("error.response", error.message);
-            return error.message;
+            return {
+                success: false,
+                message: error.message
+            };
         }
     },
     me: async () => {

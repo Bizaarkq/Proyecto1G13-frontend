@@ -57,18 +57,12 @@ const opcionesDocente = [
   },
   {
     id: 3,
-    titulo: 'Evaluaciones',
-    route: 'EvaluacionesDocente',
-    descripcion: 'Revisar las evaluaciones',
+    titulo: 'Solicitudes diferidos/repetidos',
+    route: 'AprobarDiffRep',
+    descripcion: 'Aprobar o rechazar solicitudes de diferidos/repetidos',
   },
   {
     id: 4,
-    titulo: 'Crear evaluacion',
-    route: 'CrearEvaluacion',
-    descripcion: 'Crear una evaluacion',
-  },
-  {
-    id: 5,
     titulo: 'Solicitar impresión',
     route: 'SolicitudImpresion',
     descripcion: 'Solicitar impresión de evaluaciones'
