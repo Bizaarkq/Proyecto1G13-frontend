@@ -17,11 +17,7 @@ export const revisionService = {
                 accept: "application/json",
                 Authorization: "Bearer " +token
             }
-            console.log("headers", headers);
             const response = await axios.get(endpoints.revision.estudiante.evaluaciones, { headers });
-            console.log("response", response.data);
-            console.log("response.data.data", response.data.data);
-            console.log("response.data.success", response.data.success);
             return response.data.success ? response.data.data : [];
         }catch(error){
             console.log(error);
@@ -35,14 +31,9 @@ export const revisionService = {
                 accept: "application/json",
                 Authorization: "Bearer " +token
             }
-            
             const response = await axios.post(endpoints.revision.estudiante.solicitar, body, { headers });
-            console.log("response", response.data);
-            console.log("response.data.data", response.data.data);
-            console.log("response.data.success", response.data.success);
             return response.data;            
         }catch(error){
-            console.log(error);
             return [];
         }
     }
