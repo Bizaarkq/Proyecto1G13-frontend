@@ -41,7 +41,7 @@ export function SolPendientesDoc({navigation, route}) {
   const onDismissSnackBar = () => setVisible(false);
 
   return (
-    <View style={{flexDirection: 'column', height: '100%'}}>
+    <View style={{flexDirection: 'column', height: '100%', gap: 15}}>
       {isLoading ? (
         <>
           <Text>Cargando...</Text>
@@ -49,7 +49,8 @@ export function SolPendientesDoc({navigation, route}) {
         </>
       ) : (
         <>
-          {solicitudes.map(e => {
+          <Text variant="headlineMedium">Listado de Solicitudes</Text>
+          {solicitudes.lenght && solicitudes.map(e => {
             return (
               <Card key={e.id_sol}>
                 <Card.Title title={e.carnet + ' - ' + e.materia} />
@@ -72,6 +73,11 @@ export function SolPendientesDoc({navigation, route}) {
               </Card>
             );
           })}
+          {!solicitudes.length && (
+              <>
+                <Text>No hay solicitudes pendientes</Text>
+              </>
+            )}
         </>
       )}
 

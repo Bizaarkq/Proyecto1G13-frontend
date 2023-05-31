@@ -39,7 +39,7 @@ export function RevisionEstudiante({navigation, route}) {
   const onDismissSnackBar = () => setVisible(false);
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{flex: 1, gap: 15}}>
     <ScrollView>
       <Button
         mode="contained"

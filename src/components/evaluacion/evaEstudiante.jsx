@@ -42,7 +42,7 @@ export function EvaluacionEst({navigation, route}) {
   const onDismissSnackBar = () => setVisible(false);
 
   return (
-    <View style={{flexDirection: 'column', height: '100%'}}>
+    <View style={{flexDirection: 'column', height: '100%', gap: 15}}>
       {isLoading ? (
         <>
           <Text>Cargando...</Text>

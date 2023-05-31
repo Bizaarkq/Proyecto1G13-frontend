@@ -42,8 +42,11 @@ export function RevisionesDocente({navigation, route}) {
 
   return (
     <View style={{flexDirection: 'column', height: '100%'}}>
-      <View style={{height: "90%"}}>
       <ScrollView>
+        <View 
+        style={{flexDirection: 'column', height: '100%', gap: 15}}
+        >
+       
         {isLoading ? (
           <>
             <Text>Cargando...</Text>
@@ -51,8 +54,8 @@ export function RevisionesDocente({navigation, route}) {
           </>
         ) : (
           <>
-            <Text>Listado de Revisiones</Text>
-            {revisiones.map(value => {
+            <Text variant="headlineMedium">Listado de Revisiones</Text>
+            {revisiones.length && revisiones.map(value => {
               return (
                 <Card
                   key={value.id_sol}
@@ -116,10 +119,16 @@ export function RevisionesDocente({navigation, route}) {
                 </Card>
               );
             })}
+
+            {!revisiones.length && (
+              <>
+                <Text>No hay revisiones</Text>
+              </>
+            )}
           </>
         )}
-        </ScrollView>
         </View>
+        </ScrollView>
 
         <Snackbar
           visible={visible}

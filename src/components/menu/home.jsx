@@ -21,8 +21,8 @@ export function HomeEstudiante({navigation, route}) {
   const {user} = route.params;
   const theme = useTheme();
   return (
-    <View>
-      <Text>Carnet: {user.carnet}</Text>
+    <View style={{gap: 15}}>
+      <Text variant="headlineMedium">Carnet: {user.carnet}</Text>
       {opciones.map(opcion => {
         return (
           <Card key={opcion.id} style={{backgroundColor: theme.colors.surface}}>
@@ -79,7 +79,7 @@ export function HomeDocente({navigation, route}) {
   const {user} = route.params;
   const theme = useTheme();
   return (
-    <View>
+    <View style={{gap: 15}}>
       {opcionesDocente.map(opcion => {
         return (
           <Card key={opcion.id} style={{backgroundColor: theme.colors.surface}}>
