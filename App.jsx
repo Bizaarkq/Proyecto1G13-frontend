@@ -13,6 +13,8 @@ import {SolicitudRevision} from './src/components/revision/solicitudRev';
 import {EvaluacionEst} from './src/components/evaluacion/evaEstudiante';
 import {SolPendientesDoc} from './src/components/revision/docSolRevision';
 import {DetalleSolicitud} from './src/components/revision/detalleSol';
+import {RevisionesDocente} from './src/views/DocenteRevision';
+import {RevisionDetalle} from './src/components/revision/revisionDetalle';
 
 export const AuthContext = React.createContext({});
 
@@ -186,6 +188,22 @@ function App(): JSX.Element {
                       user: state.userToken,
                     }}
                     options={{ title: 'Detalle solicitud' }}
+                  />
+                  <Stack.Screen
+                    name="RevisionDocente"
+                    component={RevisionesDocente}
+                    initialParams={{
+                      user: state.userToken,
+                    }}
+                    options={{ title: 'Revisiones' }}
+                  />
+                  <Stack.Screen
+                    name="RevisionDetalle"
+                    component={RevisionDetalle}
+                    initialParams={{
+                      user: state.userToken,
+                    }}
+                    options={{ title: 'Detalle revision' }}
                   />
                 </>
               )}

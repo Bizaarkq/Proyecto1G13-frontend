@@ -7,16 +7,16 @@ import {
   Button,
   Snackbar,
 } from 'react-native-paper';
-import {View, StyleSheet} from 'react-native';
+import {View, ScrollView, StyleSheet} from 'react-native';
 import {revisionService} from '../services/revisionService';
 import {useIsFocused} from '@react-navigation/native';
 
 const getRevisiones = async token => {
-    const revisiones = await revisionService.getRevisionesDocente(token);
-    return revisiones;
-}
+  const revisiones = await revisionService.getRevisionesDocente(token);
+  return revisiones;
+};
 
-export function RevisionEstudiante({navigation, route}) {
+export function RevisionesDocente({navigation, route}) {
   const [revisiones, setRevisiones] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [seachMessage, setSearchMessage] = React.useState('');
@@ -27,7 +27,7 @@ export function RevisionEstudiante({navigation, route}) {
   useEffect(() => {
     setIsLoading(true);
     getRevisiones(user).then(response => {
-      setEva(response.data);
+      setRevisiones(response.data);
       setSearchMessage(response.message);
       setVisible(true);
       setIsLoading(false);
@@ -42,63 +42,93 @@ export function RevisionEstudiante({navigation, route}) {
 
   return (
     <View style={{flexDirection: 'column', height: '100%'}}>
-      <Button
-        mode="contained"
-        onPress={() => navigation.navigate('SolicitudRevision')}>
-        Solicitar
-      </Button>
-      {isLoading ? (
-        <ActivityIndicator animating={true} color={MD2Colors.red_500} />
-      ) : (
-        <>
-          <Text>Listado de Revisiones</Text>
-          {revisiones.map(value => {
-            return (
-              <Card
-                key={value.id_sol}
-                style={
-                  value.estado === 'PENDIENTE'
-                    ? {backgroundColor: '#E3F2FD'}
-                    : value.estado === 'APROBADA'
-                    ? {backgroundColor: '#E8F5E9'}
-                    : {backgroundColor: '#FBE9E7'}
-                }>
-                <Card.Title title={value.nombre + ' - ' + value.codigo} />
-                <Card.Content>
-                  <Text>Motivo: {value.motivo}</Text>
-                  <Text>Fecha de solicitud: {value.fecha_solicitud}</Text>
-                  <Text>Estado: {value.estado}</Text>
-                  {value.estado === 'APROBADA' && (
-                    <>
-                      <Text>Fecha de aprobación: {value.fecha_aprobacion}</Text>
-                      <Text>Local Destinado: {value.local_destinado}</Text>
-                      <Text>
-                        Fecha de revisión: {value.fecha_hora_revision}
-                      </Text>
-                    </>
-                  )}
-                </Card.Content>
-                <Card.Actions>
-                  {value.estado !== 'PENDIENTE' && (
-                    <Button onPress={() => console.log(value)}>
-                      Ver Detalles
-                    </Button>
-                  )}
-                </Card.Actions>
-              </Card>
-            );
-          })}
-        </>
-      )}
+      <View style={{height: "90%"}}>
+      <ScrollView>
+        {isLoading ? (
+          <>
+            <Text>Cargando...</Text>
+            <ActivityIndicator animating={true} color={MD2Colors.red_500} />
+          </>
+        ) : (
+          <>
+            <Text>Listado de Revisiones</Text>
+            {revisiones.map(value => {
+              return (
+                <Card
+                  key={value.id_sol}
+                  style={
+                    !value.id
+                      ? {backgroundColor: '#F5F5F5'}
+                      : {backgroundColor: '#E8F5E9'}
+                  }>
+                  <Card.Title title={value.carnet + ' - ' + value.materia} />
+                  <Card.Content>
+                    <Text>
+                      Estudiante: {value.nombres + ' ' + value.apellidos}
+                    </Text>
+                    <Text>Nota actual: {value.nota_original}</Text>
+                    <Text>Tipo: {value.tipo}</Text>
+                    <Text>Materia: {value.materia}</Text>
+                    <Text>Fecha de solicitud: {value.fecha_solicitud}</Text>
+                    <Text>Estado: {value.id ? 'Revisado' : 'Pendiente'}</Text>
+                    <Text>Motivo: {value.motivo}</Text>
 
-      <Snackbar
-        visible={visible}
-        onDismiss={onDismissSnackBar}
-        action={{
-          label: 'Ok',
-        }}>
-        {seachMessage}
-      </Snackbar>
+                    {value.id && (
+                      <>
+                        <Text>Nueva nota: {value.nueva_nota}</Text>
+                        <Text>Motivo cambio: {value.motivo_cambio}</Text>
+                        <Text>
+                          Descripción del cambio: {value.descripcion_cambio}
+                        </Text>
+                        <Text>
+                          Docente:{' '}
+                          {value.docente_nombre + ' ' + value.docente_apellido}
+                        </Text>
+                        <Text>Fecha de revisión: {value.fecha_revision}</Text>
+                        {value.respsoc_nombre && (
+                          <>
+                            <Text>
+                              Responsable de sociedad de estudiantes:{' '}
+                              {value.respsoc_nombre +
+                                ' ' +
+                                value.respsoc_apellido}
+                            </Text>
+                          </>
+                        )}
+                      </>
+                    )}
+                  </Card.Content>
+                  <Card.Actions>
+                    {!value.id && (
+                      <>
+                        <Button
+                          onPress={() =>
+                            navigation.navigate('RevisionDetalle', {
+                              sol: value,
+                              user: user,
+                            })
+                          }>
+                          Revisar
+                        </Button>
+                      </>
+                    )}
+                  </Card.Actions>
+                </Card>
+              );
+            })}
+          </>
+        )}
+        </ScrollView>
+        </View>
+
+        <Snackbar
+          visible={visible}
+          onDismiss={onDismissSnackBar}
+          action={{
+            label: 'Ok',
+          }}>
+          {seachMessage}
+        </Snackbar>
     </View>
   );
 }
