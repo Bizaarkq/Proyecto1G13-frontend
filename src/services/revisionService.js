@@ -75,10 +75,7 @@ export const revisionService = {
                 accept: "application/json",
                 Authorization: "Bearer " +token
             }
-            console.log("boy:", body);
-            console.log("tok:", token);
             const response = await axios.post(endpoints.revision.docente.aprobar, body, { headers });
-            console.log("res:", response);
             return response.data.success ? response.data : [];
         }catch(error){
             return {
