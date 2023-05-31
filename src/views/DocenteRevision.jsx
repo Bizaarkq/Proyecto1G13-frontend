@@ -11,6 +11,11 @@ import {View, StyleSheet} from 'react-native';
 import {revisionService} from '../services/revisionService';
 import {useIsFocused} from '@react-navigation/native';
 
+const getRevisiones = async token => {
+    const revisiones = await revisionService.getRevisionesDocente(token);
+    return revisiones;
+}
+
 export function RevisionEstudiante({navigation, route}) {
   const [revisiones, setRevisiones] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
@@ -20,20 +25,17 @@ export function RevisionEstudiante({navigation, route}) {
   const {user} = route.params;
 
   useEffect(() => {
-    const getRevisiones = async () => {
-      setIsLoading(true);
-      const revisiones = await revisionService.getRevisions(user);
-      setIsLoading(false);
-      console.log('revisiones', revisiones);
-      setRevisiones(revisiones.revisiones);
-      setSearchMessage(revisiones.message);
+    setIsLoading(true);
+    getRevisiones(user).then(response => {
+      setEva(response.data);
+      setSearchMessage(response.message);
       setVisible(true);
+      setIsLoading(false);
 
       setTimeout(() => {
         setVisible(false);
       }, 3000);
-    };
-    getRevisiones();
+    });
   }, [isFocused]);
 
   const onDismissSnackBar = () => setVisible(false);
@@ -71,7 +73,7 @@ export function RevisionEstudiante({navigation, route}) {
                       <Text>Fecha de aprobación: {value.fecha_aprobacion}</Text>
                       <Text>Local Destinado: {value.local_destinado}</Text>
                       <Text>
-                        Fecha y hora de revisión: {value.fecha_hora_revision}
+                        Fecha de revisión: {value.fecha_hora_revision}
                       </Text>
                     </>
                   )}
@@ -100,10 +102,3 @@ export function RevisionEstudiante({navigation, route}) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'space-between',
-  },
-});
