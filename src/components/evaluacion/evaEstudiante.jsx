@@ -7,7 +7,7 @@ import {
   Button,
   Snackbar,
 } from 'react-native-paper';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, ScrollView} from 'react-native';
 import {evaluacionService} from '../../services/evaService';
 import {useIsFocused} from '@react-navigation/native';
 import {Dayjs} from 'dayjs';
@@ -50,6 +50,7 @@ export function EvaluacionEst({navigation, route}) {
 
   return (
     <View style={{flexDirection: 'column', height: '100%', gap: 15}}>
+      <ScrollView>
       {isLoading ? (
         <>
           <Text>Cargando...</Text>
@@ -144,7 +145,7 @@ export function EvaluacionEst({navigation, route}) {
           })}
         </>
       )}
-
+      </ScrollView>
       <Snackbar
         visible={visible}
         onDismiss={onDismissSnackBar}

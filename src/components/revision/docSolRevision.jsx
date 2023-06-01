@@ -50,7 +50,7 @@ export function SolPendientesDoc({navigation, route}) {
       ) : (
         <>
           <Text variant="headlineMedium">Listado de Solicitudes</Text>
-          {solicitudes.lenght && solicitudes.map(e => {
+          {solicitudes.length && solicitudes.map(e => {
             return (
               <Card key={e.id_sol}>
                 <Card.Title title={e.carnet + ' - ' + e.materia} />

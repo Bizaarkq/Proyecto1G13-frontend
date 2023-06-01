@@ -24,16 +24,22 @@ export const endpoints = {
     },
     evaluacion: {
         docente: {
-            getEvaluaciones: `${API_URL}/evaluacion/evaluaciones-estudiantes`,
+            getEvaluaciones: `${API_URL}/evaluacion/docente`,
             crear: `${API_URL}/evaluacion/crear`,
             marcarAsis: `${API_URL}/evaluacion/marcar-asistencia`,
             regNota: `${API_URL}/evaluacion/registrar-nota`,
             getSolicitudDifRep: `${API_URL}/evaluacion/solicitudes-diferido-repetido`,
             aprobarDifRep: `${API_URL}/evaluacion/aprobar-diferido-repetido`,
+            solImp: `${API_URL}/evaluacion/solicitar-impresion`,
         },
         estudiante: {
             getEvaluaciones: `${API_URL}/evaluacion/estudiante`,
             solicitarDifRep: `${API_URL}/evaluacion/solicitar-diferido-repetido`,
+        },
+        impresor: {
+            getSolicitudes: `${API_URL}/evaluacion/pendientes`,
+            aprobar: `${API_URL}/evaluacion/aprobar-impresion`,
+            impresion: `${API_URL}/evaluacion/imprimir`,
         }
     }
     
