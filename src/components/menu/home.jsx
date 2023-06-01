@@ -92,3 +92,28 @@ export function HomeDocente({navigation, route}) {
     </View>
   );
 }
+
+export function HomeImpresor({navigation, route}){
+  const {user} = route.params;
+  const theme = useTheme();
+  return (
+    <View style={{gap: 15}}>
+      <Card style={{backgroundColor: theme.colors.surface}}>
+        <Card.Title title="Impresiones" />
+        <Card.Content>
+          <Text>Revisar las solicitudes de impresión</Text>
+        </Card.Content>
+        <Card.Actions>
+          <Button onPress={() => navigation.navigate('RevisionImpresor')}>
+            Ir
+          </Button>
+        </Card.Actions>
+      </Card>
+    </View>
+  );
+}
+
+export function HomeAdmin({navigation, route}){
+
+}
+  

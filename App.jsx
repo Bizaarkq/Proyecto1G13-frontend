@@ -6,7 +6,7 @@ import {IconButton, MD3Colors} from 'react-native-paper';
 import Login from './src/components/auth/login.jsx';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {PaperProvider, MD3LightTheme as DefaultTheme} from 'react-native-paper';
-import {HomeEstudiante, HomeDocente} from './src/components/menu/home.jsx';
+import {HomeEstudiante, HomeDocente, HomeImpresor} from './src/components/menu/home.jsx';
 import {ActivityIndicator, MD2Colors} from 'react-native-paper';
 import {RevisionEstudiante} from './src/views/Estudiante-Revision.jsx';
 import {SolicitudRevision} from './src/components/revision/solicitudRev';
@@ -16,6 +16,8 @@ import {DetalleSolicitud} from './src/components/revision/detalleSol';
 import {RevisionesDocente} from './src/views/DocenteRevision';
 import {RevisionDetalle} from './src/components/revision/revisionDetalle';
 import {AprobDiffRep} from './src/components/evaluacion/aprobarDifRep';
+import {EvaluacionesDocente} from './src/components/impresion/solDocente';
+import {AprobImpresiones} from './src/components/impresion/aprobarImp';
 
 export const AuthContext = React.createContext({});
 
@@ -130,7 +132,9 @@ function App(): JSX.Element {
                     component={
                       state.user?.role == 'estudiante'
                         ? HomeEstudiante
-                        : HomeDocente
+                        : ( state.user?.role == 'docente' 
+                            ? HomeDocente 
+                            : HomeImpresor)
                     }
                     initialParams={{
                       user: state.user,
@@ -213,6 +217,22 @@ function App(): JSX.Element {
                       user: state.userToken,
                     }}
                     options={{ title: 'Solicitudes diferidos/repetidos' }}
+                  />
+                  <Stack.Screen
+                    name="SolicitudImpresion"
+                    component={EvaluacionesDocente}
+                    initialParams={{
+                      user: state.userToken,
+                    }}
+                    options={{ title: 'Detalle solicitud' }}
+                  />
+                  <Stack.Screen
+                    name="RevisionImpresor"
+                    component={AprobImpresiones}
+                    initialParams={{
+                      user: state.userToken,
+                    }}
+                    options={{ title: 'Solicitudes de impresión' }}
                   />
                 </>
               )}
