@@ -6,7 +6,7 @@ import {IconButton, MD3Colors} from 'react-native-paper';
 import Login from './src/components/auth/login.jsx';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {PaperProvider, MD3LightTheme as DefaultTheme} from 'react-native-paper';
-import {HomeEstudiante, HomeDocente, HomeImpresor} from './src/components/menu/home.jsx';
+import {HomeEstudiante, HomeDocente, HomeImpresor, HomeAdmin} from './src/components/menu/home.jsx';
 import {ActivityIndicator, MD2Colors} from 'react-native-paper';
 import {RevisionEstudiante} from './src/views/Estudiante-Revision.jsx';
 import {SolicitudRevision} from './src/components/revision/solicitudRev';
@@ -134,10 +134,14 @@ function App(): JSX.Element {
                         ? HomeEstudiante
                         : ( state.user?.role == 'docente' 
                             ? HomeDocente 
-                            : HomeImpresor)
+                            : ( state.user?.role == 'director'
+                                ? HomeAdmin
+                                : HomeImpresor
+                              )
+                          )
                     }
                     initialParams={{
-                      user: state.user,
+                      user: state.user?.role == 'director' ? state.userToken : state.user,
                     }}
                     options={{
                       headerRight: () => (
