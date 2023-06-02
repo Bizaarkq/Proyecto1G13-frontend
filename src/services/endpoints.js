@@ -1,4 +1,4 @@
-import {API_URL} from '@env';
+import {API_URL} from '../../enviroment';
 
 export const endpoints = {
     auth: {
@@ -41,6 +41,10 @@ export const endpoints = {
             aprobar: `${API_URL}/evaluacion/aprobar-impresion`,
             impresion: `${API_URL}/evaluacion/imprimir`,
         }
+    },
+    admin:{
+        getConfig: `${API_URL}/config/getConfig`,
+        setConfig: `${API_URL}/config/setConfig`,
     }
     
 }
