@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {
   ActivityIndicator,
   MD2Colors,
@@ -11,6 +11,8 @@ import {View, StyleSheet, ScrollView} from 'react-native';
 import {evaluacionService} from '../../services/evaService';
 import {useIsFocused} from '@react-navigation/native';
 import {Dayjs} from 'dayjs';
+import DocumentPicker, {types} from 'react-native-document-picker';
+import RNFS from 'react-native-fs';
 
 const getEvaluciones = async token => {
   const evaluaciones = await evaluacionService.getEvaluaciones(token);
@@ -31,6 +33,8 @@ export function EvaluacionEst({navigation, route}) {
   const [reload, setReload] = React.useState(false); // para recargar la pantalla
   const [event, setEvent] = React.useState(false); // para recargar la pantalla
   const {user} = route.params;
+  const [file, setFile] = React.useState([]);
+  const [selectedFile, setSelectedFile] = React.useState(null);
 
   useEffect(() => {
     setIsLoading(true);
@@ -48,103 +52,140 @@ export function EvaluacionEst({navigation, route}) {
 
   const onDismissSnackBar = () => setVisible(false);
 
+  const pickFile = useCallback(async () => {
+    try {
+      const res = await DocumentPicker.pickSingle({
+        presentationStyle: 'fullScreen',
+        type: [types.pdf],
+      });
+      setSelectedFile(res.name);
+      const file = await RNFS.readFile(res.uri, 'base64');
+      setFile(file);
+    } catch (err) {
+      if (DocumentPicker.isCancel(err)) {
+        console.log('Canceled from single doc picker');
+      } else {
+        throw err;
+      }
+    }
+  }, []);
+
   return (
     <View style={{flexDirection: 'column', height: '100%', gap: 15}}>
       <ScrollView>
-      {isLoading ? (
-        <>
-          <Text>Cargando...</Text>
-          <ActivityIndicator animating={true} color={MD2Colors.red_500} />
-        </>
-      ) : (
-        <>
-          {eva.map(e => {
-            return (
-              <Card
-                key={e.id_evaluacion}
-                style={
-                  !!e.nota
-                    ? e.nota >= 7
-                      ? {backgroundColor: '#E8F5E9'}
-                      : {backgroundColor: '#FBE9E7'}
-                    : !!e.diferido_repetido 
-                    ? {backgroundColor: '#FFF8E1'}
-                    :{backgroundColor: '#FAFAFA'}
-                }>
-                <Card.Title title={e.nombre + ' - ' + e.materia} />
-                <Card.Content>
-                  <Text>Tipo: {e.tipo}</Text>
-                  <Text>Fecha: {e.fecha_realizacion}</Text>
-                  <Text>Lugar: {e.lugar}</Text>
-                  <Text>Ciclo: {e.ciclo}</Text>
-                  {e.asistencia && (
-                    <Text>Asistencia: {e.asistencia ? 'Si' : 'No'}</Text>
-                  )}
-                  {e.nota && <Text>Nota: {e.nota}</Text>}
-                  {e.es_diferido && <Text>Diferido</Text>}
-                  {e.es_repetido && <Text>Repetido</Text>}
-                  {e.diferido_repetido && <Text variant="labelSmall">Solicitud enviada</Text> }
-                </Card.Content>
-                <Card.Actions>
-                  {e?.puede_diferir && (
-                    <Button
-                      disabled={event}
-                      onPress={() => {
-                        setEvent(true);
-                        solicitarDiferir(
-                          {
-                            id_evaluacion: e.id_evaluacion,
-                            tipo: 'diferido',
-                          },
-                          user,
-                        ).then(response => {
-                          
-                          setSearchMessage(response.message);
-                          setVisible(true);
+        {isLoading ? (
+          <>
+            <Text>Cargando...</Text>
+            <ActivityIndicator animating={true} color={MD2Colors.red_500} />
+          </>
+        ) : (
+          <>
+            {eva.map(e => {
+              return (
+                <Card
+                  key={e.id_evaluacion}
+                  style={
+                    !!e.nota
+                      ? e.nota >= 7
+                        ? {backgroundColor: '#E8F5E9'}
+                        : {backgroundColor: '#FBE9E7'}
+                      : !!e.diferido_repetido
+                      ? {backgroundColor: '#FFF8E1'}
+                      : {backgroundColor: '#FAFAFA'}
+                  }>
+                  <Card.Title title={e.nombre + ' - ' + e.materia} />
+                  <Card.Content>
+                    <Text>Tipo: {e.tipo}</Text>
+                    <Text>Fecha: {e.fecha_realizacion}</Text>
+                    <Text>Lugar: {e.lugar}</Text>
+                    <Text>Ciclo: {e.ciclo}</Text>
+                    {e.asistencia && (
+                      <Text>Asistencia: {e.asistencia ? 'Si' : 'No'}</Text>
+                    )}
+                    {e.nota && <Text>Nota: {e.nota}</Text>}
+                    {e.es_diferido && <Text>Diferido</Text>}
+                    {e.es_repetido && <Text>Repetido</Text>}
+                    {e.diferido_repetido && (
+                      <Text variant="labelSmall">Solicitud enviada</Text>
+                    )}
+                  </Card.Content>
+                  <Card.Actions>
+                    {e?.puede_diferir && (
+                      <>
+                        <Button
+                          disabled={event || file.length === 0}
+                          onPress={() => {
+                            setEvent(true);
+                            solicitarDiferir(
+                              {
+                                id_evaluacion: e.id_evaluacion,
+                                tipo: 'diferido',
+                                file: file,
+                              },
+                              user,
+                            ).then(response => {
+                              setSearchMessage(response.message);
+                              setVisible(true);
+                              setFile([]);
 
-                          setTimeout(() => {
-                            setReload(!reload);
-                            setEvent(false);
-                            setVisible(false);
-                          }, 3000);
-                        });
-                      }}>
-                      Diferir
-                    </Button>
-                  )}
-                  {e?.puede_repetir && (
-                    <Button
-                      disabled={event}
-                      onPress={() => {
-                        setEvent(true);
-                        solicitarDiferir(
-                          {
-                            id_evaluacion: e.id_evaluacion,
-                            tipo: 'repetido',
-                          },
-                          user,
-                        ).then(response => {
-                          
-                          setSearchMessage(response.message);
-                          setVisible(true);
+                              setTimeout(() => {
+                                setReload(!reload);
+                                setEvent(false);
+                                setVisible(false);
+                              }, 3000);
+                            });
+                          }}>
+                          Diferir
+                        </Button>
+                        <Button
+                          disabled={event}
+                          onPress={pickFile}
+                          mode="contained">
+                          Subir archivo
+                        </Button>
+                      </>
+                    )}
+                    {e?.puede_repetir && (
+                      <>
+                        <Button
+                          disabled={event || file.length === 0}
+                          onPress={() => {
+                            setEvent(true);
+                            solicitarDiferir(
+                              {
+                                id_evaluacion: e.id_evaluacion,
+                                tipo: 'repetido',
+                                file: file,
+                              },
+                              user,
+                            ).then(response => {
+                              setSearchMessage(response.message);
+                              setVisible(true);
 
-                          setTimeout(() => {
-                            
-                            setReload(!reload);
-                            setEvent(false);
-                            setVisible(false);
-                          }, 3000);
-                        });
-                      }}>
-                      Repetir
-                    </Button>
-                  )}
-                </Card.Actions>
-              </Card>
-            );
-          })}
-        </>
-      )}
+                              setTimeout(() => {
+                                setReload(!reload);
+                                setEvent(false);
+                                setVisible(false);
+                              }, 3000);
+                            });
+                          }}>
+                          Repetir
+                        </Button>
+                        <Button
+                          disabled={event}
+                          onPress={pickFile}
+                          icon="file-pdf"
+                          mode="contained">
+                          Subir archivo
+                        </Button>
+                      </>
+                    )}
+                  </Card.Actions>
+                </Card>
+              );
+            })}
+          </>
+        )}
       </ScrollView>
       <Snackbar
         visible={visible}

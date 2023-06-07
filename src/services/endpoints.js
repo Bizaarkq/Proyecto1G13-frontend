@@ -4,7 +4,10 @@ export const endpoints = {
     auth: {
         login: `${API_URL}/auth/login`,
         me: `${API_URL}/auth/me`,
-        logout: `${API_URL}/auth/logout`
+        logout: `${API_URL}/auth/logout`,
+        register: `${API_URL}/auth/register`,
+        aprobarRegistro: `${API_URL}/auth/aprobar-registro`,
+        solicitudes: `${API_URL}/auth/solicitud-registro`,
     },
     revision: {
         motivos: `${API_URL}/revision/motivos`,
