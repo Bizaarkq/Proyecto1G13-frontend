@@ -13,6 +13,7 @@ import {useIsFocused} from '@react-navigation/native';
 import {Dayjs} from 'dayjs';
 import DocumentPicker, {types} from 'react-native-document-picker';
 import RNFS from 'react-native-fs';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const getEvaluciones = async token => {
   const evaluaciones = await evaluacionService.getEvaluaciones(token);
@@ -72,11 +73,14 @@ export function EvaluacionEst({navigation, route}) {
 
   return (
     <View style={{flexDirection: 'column', height: '100%', gap: 15}}>
+      <Spinner
+        visible={isLoading}
+        textContent={'Cargando...'}
+        textStyle={{color: '#000'}}
+      />
       <ScrollView>
         {isLoading ? (
           <>
-            <Text>Cargando...</Text>
-            <ActivityIndicator animating={true} color={MD2Colors.red_500} />
           </>
         ) : (
           <>
