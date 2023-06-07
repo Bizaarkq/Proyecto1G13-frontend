@@ -7,11 +7,11 @@ import {Button} from 'react-native-paper';
 import {TextInput} from 'react-native-paper';
 
 const LoginSchema = Yup.object().shape({
-  email: Yup.string().email('Invalid email').required('Required'),
+  email: Yup.string().email('Correo Inválido').required('Required'),
   password: Yup.string().required('Required'),
 });
 
-function Login() {
+function Login({navigation, route}) {
   const {signIn} = useContext(AuthContext);
 
   return (
@@ -24,7 +24,7 @@ function Login() {
           setSubmitting(false);
         }}>
         {formik => (
-          <View>
+          <View style={{gap: 15, display: 'flex'}}>
             <TextInput
               mode="outlined"
               placeholder="ab12345@ues.edu.sv"
@@ -46,9 +46,27 @@ function Login() {
             {formik.touched.password && formik.errors.password ? (
               <Text>{formik.errors.password}</Text>
             ) : null}
-            <Button mode="contained" onPress={formik.handleSubmit}>
-              Iniciar Sesión
-            </Button>
+            <View
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                flexDirection: 'row',
+              }}>
+              <Button
+                mode="contained"
+                onPress={() => {
+                  navigation.navigate('CrearUsuario');
+                }}
+                style={{width: '40%'}}>
+                Crear Usuario
+              </Button>
+              <Button
+                mode="contained"
+                onPress={formik.handleSubmit}
+                style={{width: '40%'}}>
+                Iniciar Sesión
+              </Button>
+            </View>
           </View>
         )}
       </Formik>

@@ -6,7 +6,7 @@ import {IconButton, MD3Colors} from 'react-native-paper';
 import Login from './src/components/auth/login.jsx';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {PaperProvider, MD3LightTheme as DefaultTheme} from 'react-native-paper';
-import {HomeEstudiante, HomeDocente, HomeImpresor, HomeAdmin} from './src/components/menu/home.jsx';
+import {HomeEstudiante, HomeDocente, HomeImpresor, HomeAdmin, HomeCoordinador} from './src/components/menu/home.jsx';
 import {ActivityIndicator, MD2Colors} from 'react-native-paper';
 import {RevisionEstudiante} from './src/views/Estudiante-Revision.jsx';
 import {SolicitudRevision} from './src/components/revision/solicitudRev';
@@ -18,6 +18,8 @@ import {RevisionDetalle} from './src/components/revision/revisionDetalle';
 import {AprobDiffRep} from './src/components/evaluacion/aprobarDifRep';
 import {EvaluacionesDocente} from './src/components/impresion/solDocente';
 import {AprobImpresiones} from './src/components/impresion/aprobarImp';
+import {CrearUsuario} from './src/components/auth/createUser';
+import {AprobRegistro} from './src/components/auth/aprobarRegistro';
 
 export const AuthContext = React.createContext({});
 
@@ -124,20 +126,26 @@ function App(): JSX.Element {
               {state?.isLoading ? (
                 <Stack.Screen name="splash" options={{ title: 'Iniciando sesión' }} component={SplashScreen} />
               ) : state.userToken === null ? (
+                <>
                 <Stack.Screen name="Login" component={Login} />
+                <Stack.Screen name="CrearUsuario" options={{ title: 'Registrarse' }} component={CrearUsuario} />
+                </>
               ) : (
                 <>
                   <Stack.Screen
                     name="Inicio"
                     component={
-                      state.user?.role == 'estudiante'
+                      state.user?.role.includes('estudiante')
                         ? HomeEstudiante
-                        : ( state.user?.role == 'docente' 
-                            ? HomeDocente 
-                            : ( state.user?.role == 'director'
+                        : ( state.user?.role.includes('coordinador')
+                            ? HomeCoordinador 
+                            : ( state.user?.role.includes('docente')
+                                ? HomeDocente
+                                : ( state.user?.role.includes('director')
                                 ? HomeAdmin
                                 : HomeImpresor
                               )
+                            )
                           )
                     }
                     initialParams={{
@@ -237,6 +245,14 @@ function App(): JSX.Element {
                       user: state.userToken,
                     }}
                     options={{ title: 'Solicitudes de impresión' }}
+                  />
+                  <Stack.Screen
+                    name="AprobRegistro"
+                    component={AprobRegistro}
+                    initialParams={{
+                      user: state.userToken,
+                    }}
+                    options={{ title: 'Solicitudes de registro' }}
                   />
                 </>
               )}
