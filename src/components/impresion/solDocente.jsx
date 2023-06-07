@@ -15,6 +15,7 @@ import {evaluacionService} from '../../services/evaService';
 import {useIsFocused} from '@react-navigation/native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const getEvaluciones = async token => {
   const evaluaciones = await evaluacionService.getEvaDocente(token);
@@ -69,11 +70,14 @@ export function EvaluacionesDocente({navigation, route}) {
 
   return (
     <View style={{flexDirection: 'column', height: '100%', gap: 15}}>
+      <Spinner
+        visible={isLoading}
+        textContent={'Cargando...'}
+        textStyle={{color: '#000'}}
+      />
       <ScrollView style={{gap: 15}}>
         {isLoading ? (
           <>
-            <Text>Cargando...</Text>
-            <ActivityIndicator animating={true} color={MD2Colors.red_500} />
           </>
         ) : (
           <>
