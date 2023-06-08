@@ -12,6 +12,7 @@ import {View, StyleSheet, ScrollView} from 'react-native';
 import {useIsFocused} from '@react-navigation/native';
 import {Formik} from 'formik';
 import { authService } from '../../services/authService';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const getSolicitudes = async token => {
   const sol = await authService.solicitudes(token);
@@ -51,10 +52,13 @@ export function AprobRegistro({navigation, route}) {
 
   return (
     <View style={{flexDirection: 'column', height: '100%', gap: 15}}>
+      <Spinner
+        visible={isLoading}
+        textContent={'Cargando...'}
+        textStyle={{color: '#000'}}
+      />
       {isLoading ? (
         <>
-          <Text>Cargando...</Text>
-          <ActivityIndicator animating={true} color={MD2Colors.red_500} />
         </>
       ) : (
         <>
