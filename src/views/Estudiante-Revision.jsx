@@ -10,6 +10,7 @@ import {
 import {View, ScrollView, StyleSheet, SafeAreaView} from 'react-native';
 import {revisionService} from '../services/revisionService';
 import {useIsFocused} from '@react-navigation/native';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export function RevisionEstudiante({navigation, route}) {
   const [revisiones, setRevisiones] = React.useState([]);
@@ -40,6 +41,11 @@ export function RevisionEstudiante({navigation, route}) {
 
   return (
     <View style={{flex: 1, gap: 15}}>
+      <Spinner
+        visible={isLoading}
+        textContent={'Cargando...'}
+        textStyle={{color: '#000'}}
+      />
     <ScrollView>
       <Button
         mode="contained"
@@ -47,7 +53,7 @@ export function RevisionEstudiante({navigation, route}) {
         Solicitar
       </Button>
       {isLoading ? (
-        <ActivityIndicator animating={true} color={MD2Colors.red_500} />
+        <></>
       ) : (
         <>
           <Text>Listado de Revisiones</Text>

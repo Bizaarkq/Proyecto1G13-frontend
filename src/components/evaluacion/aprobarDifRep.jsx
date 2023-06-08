@@ -11,6 +11,7 @@ import {View, StyleSheet} from 'react-native';
 import {evaluacionService} from '../../services/evaService';
 import {useIsFocused} from '@react-navigation/native';
 import {Dayjs} from 'dayjs';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const getSolicitudes = async token => {
   const sol = await evaluacionService.getSolicitudesDifRep(token);
@@ -50,10 +51,13 @@ export function AprobDiffRep({navigation, route}) {
 
   return (
     <View style={{flexDirection: 'column', height: '100%', gap: 15}}>
+      <Spinner
+        visible={isLoading}
+        textContent={'Cargando...'}
+        textStyle={{color: '#000'}}
+      />
       {isLoading ? (
         <>
-          <Text>Cargando...</Text>
-          <ActivityIndicator animating={true} color={MD2Colors.red_500} />
         </>
       ) : (
         <>

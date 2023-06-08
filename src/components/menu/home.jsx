@@ -117,6 +117,63 @@ export function HomeImpresor({navigation, route}) {
   );
 }
 
+const opcionesCoord = [
+  {
+    id: 1,
+    titulo: 'Revision',
+    route: 'RevisionDocente',
+    descripcion: 'Revisar las evaluaciones',
+  },
+  {
+    id: 2,
+    titulo: 'Solicitudes de revision',
+    route: 'SolicitudesRevisionDocente',
+    descripcion: 'Aprobar o rechazar solicitudes de revisión',
+  },
+  {
+    id: 3,
+    titulo: 'Solicitudes diferidos/repetidos',
+    route: 'AprobarDiffRep',
+    descripcion: 'Aprobar o rechazar solicitudes de diferidos/repetidos',
+  },
+  {
+    id: 4,
+    titulo: 'Solicitar impresión',
+    route: 'SolicitudImpresion',
+    descripcion: 'Solicitar impresión de evaluaciones',
+  },
+  {
+    id: 5,
+    titulo: 'Solicitudes de registro',
+    route: 'AprobRegistro',
+    descripcion: 'Aprobar o rechazar solicitudes de registro'
+  }
+];
+
+export function HomeCoordinador({navigation, route}) {
+  const {user} = route.params;
+  const theme = useTheme();
+  return (
+    <View style={{gap: 15}}>
+      {opcionesCoord.map(opcion => {
+        return (
+          <Card key={opcion.id} style={{backgroundColor: theme.colors.surface}}>
+            <Card.Title title={opcion.titulo} />
+            <Card.Content>
+              <Text>{opcion.descripcion}</Text>
+            </Card.Content>
+            <Card.Actions>
+              <Button onPress={() => navigation.navigate(opcion.route)}>
+                Ir
+              </Button>
+            </Card.Actions>
+          </Card>
+        );
+      })}
+    </View>
+  );
+}
+
 export function HomeAdmin({navigation, route}) {
   const {user} = route.params;
   const theme = useTheme();

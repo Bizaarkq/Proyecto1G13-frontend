@@ -10,6 +10,7 @@ import {
 import {View, StyleSheet} from 'react-native';
 import {revisionService} from '../../services/revisionService';
 import {useIsFocused} from '@react-navigation/native';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const getSolicitudes = async token => {
   const sols = await revisionService.getSolicitudesDocente(token);
@@ -42,10 +43,13 @@ export function SolPendientesDoc({navigation, route}) {
 
   return (
     <View style={{flexDirection: 'column', height: '100%', gap: 15}}>
+      <Spinner
+        visible={isLoading}
+        textContent={'Cargando...'}
+        textStyle={{color: '#000'}}
+      />
       {isLoading ? (
         <>
-          <Text>Cargando...</Text>
-          <ActivityIndicator animating={true} color={MD2Colors.red_500} />
         </>
       ) : (
         <>

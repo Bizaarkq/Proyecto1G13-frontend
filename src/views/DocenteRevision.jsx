@@ -10,6 +10,7 @@ import {
 import {View, ScrollView, StyleSheet} from 'react-native';
 import {revisionService} from '../services/revisionService';
 import {useIsFocused} from '@react-navigation/native';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const getRevisiones = async token => {
   const revisiones = await revisionService.getRevisionesDocente(token);
@@ -42,6 +43,11 @@ export function RevisionesDocente({navigation, route}) {
 
   return (
     <View style={{flexDirection: 'column', height: '100%'}}>
+      <Spinner
+        visible={isLoading}
+        textContent={'Cargando...'}
+        textStyle={{color: '#000'}}
+      />
       <ScrollView>
         <View 
         style={{flexDirection: 'column', height: '100%', gap: 15}}
@@ -49,8 +55,6 @@ export function RevisionesDocente({navigation, route}) {
        
         {isLoading ? (
           <>
-            <Text>Cargando...</Text>
-            <ActivityIndicator animating={true} color={MD2Colors.red_500} />
           </>
         ) : (
           <>
